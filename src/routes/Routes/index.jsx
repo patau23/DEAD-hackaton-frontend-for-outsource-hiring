@@ -46,9 +46,9 @@ function AppRoutes() {
       <Route
         path="/registration"
         element={
-          <GuestRoute>
+          <PrivateRoute>
             <Registration />
-          </GuestRoute>
+          </PrivateRoute>
         }
       />
 

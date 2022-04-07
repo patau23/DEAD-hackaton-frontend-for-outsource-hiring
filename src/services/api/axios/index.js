@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosInstance = axios.create({
-  baseURL: "http://nestjs-boilerplate-test.herokuapp.com/api",
+  baseURL: "http://34.88.122.38",
 });
 
 axiosInstance.interceptors.request.use(

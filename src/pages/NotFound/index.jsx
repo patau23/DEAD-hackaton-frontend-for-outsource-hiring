@@ -13,12 +13,8 @@ function NotFound() {
     <Container maxWidth="sm" className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h2" gutterBottom>
-            404
-          </Typography>
-          <Typography variant="h3" gutterBottom>
-            Page not found.
-          </Typography>
+          <Typography variant="h2">404</Typography>
+          <Typography variant="h3">Page not found.</Typography>
         </Grid>
       </Grid>
     </Container>

@@ -11,8 +11,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import validationSchema from "./validation";
 import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+// import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,25 +23,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Login() {
-  const classes = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
+const CONFIG = {
+  cache: "no-cache",
+  mode: "no-cors",
+  credentials: "include",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+};
+
+export default function LoginScreen() {
   const auth = useAuth();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-  });
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("adminadmin");
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
 
-  const onSubmit = async (data) => {
+  const [error, setError] = useState();
+
+  const singIn = async () => {
     try {
       setIsLoading(true);
-      const { data: loginData } = await api.auth.login(data);
-
+      const { data: loginData } = await api.auth.login({
+        username: username,
+        password: password,
+      });
       auth.setToken(loginData.token);
       auth.setUser(loginData.user);
     } catch (e) {
@@ -59,65 +67,20 @@ function Login() {
   };
 
   return (
-    <Container maxWidth="xs" className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h6">Login</Typography>
-        </Grid>
-      </Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  error={Boolean(errors.email?.message)}
-                  fullWidth={true}
-                  type="email"
-                  label="Email"
-                  variant="filled"
-                  helperText={errors.email?.message}
-                />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  error={Boolean(errors.password?.message)}
-                  type="password"
-                  fullWidth={true}
-                  label="Password"
-                  variant="filled"
-                  helperText={errors.password?.message}
-                />
-              )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={isLoading}
-            >
-              Login
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Container>
+    <form>
+      <p>Введите свои данные для входа</p>
+      <TextField onChange={(login) => setUsername(login)} />
+      <br />
+      <TextField onChange={(password) => setPassword(password)} />
+      {error ? <TextField>{error}</TextField> : <></>}
+      <Button
+        disabled={isLoading}
+        onClick={() => {
+          singIn();
+        }}
+      >
+        login
+      </Button>
+    </form>
   );
 }
-
-export default Login;

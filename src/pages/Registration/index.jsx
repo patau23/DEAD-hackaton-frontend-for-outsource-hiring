@@ -11,19 +11,43 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import validationSchema from "./validation";
 import api from "../../services/api";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
   },
   buttonSpacing: {
     marginLeft: theme.spacing(1),
   },
 }));
 
+const BASE_URL = "http://34.88.122.38";
+
 function Registration() {
+  const [techs, setTechs] = useState([]);
+  const [dbs, setDbs] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [levels, setLevels] = useState([]);
+
+  useEffect(() => {
+    axios.get(BASE_URL + `/technology`).then(({ data }) => {
+      setTechs(data);
+    });
+    axios.get(BASE_URL + `/database`).then(({ data }) => {
+      setDbs(data);
+    });
+    axios.get(BASE_URL + `/skill`).then(({ data }) => {
+      setSkills(data);
+      console.log(data);
+    });
+    axios.get(BASE_URL + `/level`).then(({ data }) => {
+      setLevels(data);
+      console.log(data);
+    });
+  }, []);
+
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const auth = useAuth();
@@ -59,15 +83,16 @@ function Registration() {
   };
 
   return (
-    <Container maxWidth="xs" className={classes.root}>
+    <Container maxHeight="sm" className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h6">Create new account</Typography>
         </Grid>
       </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+        <Grid container spacing={2}>
+          {/* FIRSTNAME */}
+          <Grid item xs={3}>
             <Controller
               name="firstName"
               control={control}
@@ -85,7 +110,8 @@ function Registration() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* LASTNAME */}
+          <Grid item xs={3}>
             <Controller
               name="lastName"
               control={control}
@@ -103,9 +129,10 @@ function Registration() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          {/* LEVEL */}
+          <Grid item xs={3}>
             <Controller
-              name="email"
+              name="level"
               control={control}
               defaultValue=""
               render={({ field }) => (
@@ -122,7 +149,7 @@ function Registration() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={3}>
             <Controller
               name="password"
               control={control}
@@ -140,23 +167,15 @@ function Registration() {
               )}
             />
           </Grid>
-          <Grid item xs={12}>
+
+          <Grid item xs={3}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
               disabled={isLoading}
             >
-              Registration
-            </Button>
-            <Button
-              color="inherit"
-              type="submit"
-              className={classes.buttonSpacing}
-              component={Link}
-              to="/login"
-            >
-              Already have an account?
+              Registrate
             </Button>
           </Grid>
         </Grid>
