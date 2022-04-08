@@ -30,9 +30,9 @@ function AppRoutes() {
       <Route
         path="/profile"
         element={
-          <PrivateRoute>
+          <GuestRoute>
             <Profile />
-          </PrivateRoute>
+          </GuestRoute>
         }
       />
       <Route

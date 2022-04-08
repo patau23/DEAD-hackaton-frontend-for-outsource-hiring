@@ -65,9 +65,6 @@ function Registration() {
     try {
       setIsLoading(true);
       await api.auth.registration(data);
-      const { data: loginData } = await api.auth.login(data);
-      auth.setToken(loginData.token);
-      auth.setUser(loginData.user);
     } catch (e) {
       if (e.response.status === 422) {
         Object.keys(e.response.data.errors).forEach((key) => {

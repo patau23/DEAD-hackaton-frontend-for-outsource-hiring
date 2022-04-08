@@ -41,19 +41,16 @@ function App () {
             Hackaton App
           </Typography>
           <div className={classes.rightToolbar}>
-            <Button color='inherit' component={Link} to='/'>
+            <Button color='inherit' component={Link} to='/profile'>
               Home
             </Button>
             <Button color='inherit' component={Link} to='/'>
-              Messenger
+              Работники
             </Button>
           </div>
           {auth.isLoaded &&
             (auth.user ? (
               <>
-                <Button color='inherit' component={Link} to='/profile'>
-                  {auth.user.firstName} {auth.user.lastName}
-                </Button>
                 <Button color='inherit' component={Link} to='/registration'>
                   Зарегистрировать работника
                 </Button>
